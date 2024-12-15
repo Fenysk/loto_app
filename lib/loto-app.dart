@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:loto_app/repository/grid.repository.dart';
+import 'package:loto_app/widget/ball-number.widget.dart';
 
 class LotoApp extends StatefulWidget {
   const LotoApp({
@@ -11,8 +13,7 @@ class LotoApp extends StatefulWidget {
 }
 
 class _LotoAppState extends State<LotoApp> {
-  late List<int> pendingNumbers;
-  List<int> fallenNumbers = [];
+  final gridRepository = GridRepositoryImpl();
 
   @override
   void initState() {
@@ -22,50 +23,47 @@ class _LotoAppState extends State<LotoApp> {
 
   void resetTurn() {
     setState(() {
-      pendingNumbers = [];
-
-      for (int i = 1; i <= 90; i++) pendingNumbers.add(i);
-
-      fallenNumbers.clear();
+      gridRepository.resetTurn();
     });
   }
 
   void drawRandomNumberInPending() {
-    if (pendingNumbers.isEmpty) return;
-
-    final random = Random();
-    final randomIndex = random.nextInt(pendingNumbers.length);
-    final drawnNumber = pendingNumbers[randomIndex];
-
     setState(() {
-      pendingNumbers.removeAt(randomIndex);
-      fallenNumbers.add(drawnNumber);
+      gridRepository.drawRandomNumberInPending();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: buildLotoGrid(),
-          ),
-          Expanded(
-            child: buildSideSection(),
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(40),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: buildLotoGrid(),
+            ),
+            const SizedBox(width: 40),
+            Expanded(
+              child: buildSideSection(),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Center buildSideSection() {
+  Widget buildSideSection() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          buildLastNumbers(),
+          Spacer(),
+          SizedBox(height: 40),
           ElevatedButton(
             onPressed: drawRandomNumberInPending,
             child: const Text('Draw Number'),
@@ -80,7 +78,35 @@ class _LotoAppState extends State<LotoApp> {
     );
   }
 
-  Padding buildLotoGrid() {
+  Widget buildLastNumbers() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (gridRepository.fallenNumbers.length > 2)
+          BallNumberWidget(
+            isFalled: true,
+            number: gridRepository.fallenNumbers[gridRepository.fallenNumbers.length - 3],
+            radius: 30,
+          ),
+        const SizedBox(width: 30),
+        if (gridRepository.fallenNumbers.length > 1)
+          BallNumberWidget(
+            isFalled: true,
+            number: gridRepository.fallenNumbers[gridRepository.fallenNumbers.length - 2],
+            radius: 40,
+          ),
+        const SizedBox(width: 30),
+        if (gridRepository.fallenNumbers.isNotEmpty)
+          BallNumberWidget(
+            isFalled: true,
+            number: gridRepository.fallenNumbers.last,
+            radius: 50,
+          ),
+      ],
+    );
+  }
+
+  Widget buildLotoGrid() {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: GridView.builder(
@@ -93,19 +119,14 @@ class _LotoAppState extends State<LotoApp> {
         itemCount: 90,
         itemBuilder: (context, index) {
           int number = index + 1;
-          return Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: getNumberColor(number),
-            ),
-            child: Center(
-              child: Text(number.toString()),
-            ),
+          return BallNumberWidget(
+            isFalled: isFalled(number),
+            number: number,
           );
         },
       ),
     );
   }
 
-  Color getNumberColor(int number) => fallenNumbers.contains(number) ? Colors.blue : Colors.grey;
+  bool isFalled(int number) => gridRepository.fallenNumbers.contains(number);
 }
