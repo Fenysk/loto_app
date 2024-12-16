@@ -6,11 +6,14 @@ A Flutter app for playing Loto game.
 ### Description
 The app simulates the traditional loto game experience where numbers are drawn randomly from a pool of 90 numbers, just like in the physical game. Each drawn number is clearly displayed and tracked, making it easy to follow the game's progress.
 
-### Key features:
+### Key features
 - 90-number grid display
 - Random number drawing
 - Last 3 numbers display
 - Reset functionality
+
+### Screenshots
+![All features](https://raw.githubusercontent.com/Fenysk/loto_app/refs/heads/main/assets/All-features.png)
 
 ## 💡Idea
 The idea came to me while playing loto today as I write these lines.
