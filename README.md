@@ -13,7 +13,9 @@ The app simulates the traditional loto game experience where numbers are drawn r
 - Reset functionality
 
 ## 💡Idea
-The idea came to me while playing loto today as I write these lines. I wanted to create a simple yet effective tool that could replicate the excitement of a real loto game.
+The idea came to me while playing loto today as I write these lines.
+This project was inspired by [LotoAsso](https://lotoasso.com/) created by Jérôme Botreau.
+
 
 ## Language & Tools used
 [![Language & Tools used](https://skillicons.dev/icons?i=flutter,dart,materialui,vscode)](https://skillicons.dev)
