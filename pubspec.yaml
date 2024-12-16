@@ -1,5 +1,5 @@
 name: loto_app
-description: "A new Flutter project."
+description: "A Flutter app for playing Loto game with a grid of 90 numbers that can be drawn randomly"
 publish_to: 'none'
 version: 0.1.0
 
