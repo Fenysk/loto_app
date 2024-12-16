@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loto_app/repository/ball-grid.repository.dart';
 import 'package:loto_app/repository/card-grid.repository.dart';
+import 'package:loto_app/service/keyboard.service.dart';
 import 'package:loto_app/widget/ball-number.widget.dart';
 import 'package:loto_app/widget/ball-grid.widget.dart';
 import 'package:loto_app/widget/card-grid.widget.dart';
@@ -42,24 +43,30 @@ class _LotoGamePageState extends State<LotoGamePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Play Loto'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(40),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Flexible(
-              child: BallGridWidget(),
-            ),
-            const SizedBox(width: 40),
-            Expanded(
-              child: buildSideSection(),
-            ),
-          ],
+    return KeyboardListener(
+      focusNode: FocusNode(),
+      onKeyEvent: KeyboardService(
+        onSpacePressed: drawRandomNumberInPending,
+      ).handleKeyboardEvent,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Play Loto'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(40),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: BallGridWidget(),
+              ),
+              const SizedBox(width: 40),
+              Expanded(
+                child: buildSideSection(),
+              ),
+            ],
+          ),
         ),
       ),
     );
