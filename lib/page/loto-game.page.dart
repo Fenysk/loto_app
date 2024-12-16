@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:loto_app/repository/ball-grid.repository.dart';
+import 'package:loto_app/repository/card-grid.repository.dart';
 import 'package:loto_app/widget/ball-number.widget.dart';
 import 'package:loto_app/widget/ball-grid.widget.dart';
+import 'package:loto_app/widget/card-grid.widget.dart';
 
 class LotoGamePage extends StatefulWidget {
   const LotoGamePage({
@@ -14,10 +16,15 @@ class LotoGamePage extends StatefulWidget {
 
 class _LotoGamePageState extends State<LotoGamePage> {
   final gridRepository = GridRepositoryImpl();
+  final cardGridRepo = CardGridRepositoryImpl();
+
+  List<int> cardNumbers = [];
+  bool showCardGrid = false;
 
   @override
   void initState() {
     resetTurn();
+    cardNumbers = cardGridRepo.generate15RandomNumbers();
     super.initState();
   }
 
@@ -63,12 +70,40 @@ class _LotoGamePageState extends State<LotoGamePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        buildSwitchCardGrid(),
+        SizedBox(height: 20),
+        if (showCardGrid)
+          CardGridWidget(
+            cardNumbers: cardNumbers,
+            fallenNumbers: gridRepository.fallenNumbers,
+          ),
+        SizedBox(height: 40),
         buildLastNumbers(5),
         Spacer(),
         SizedBox(height: 40),
         buildActionSections(),
       ],
     );
+  }
+
+  Row buildSwitchCardGrid() {
+    return Row(
+      children: [
+        Switch(
+          value: showCardGrid,
+          onChanged: toggleShowCardAndGenerateIt,
+        ),
+        const SizedBox(width: 10),
+        const Text('Show Card Grid'),
+      ],
+    );
+  }
+
+  void toggleShowCardAndGenerateIt(bool value) {
+    setState(() {
+      showCardGrid = value;
+      cardNumbers = cardGridRepo.generate15RandomNumbers();
+    });
   }
 
   Widget buildActionSections() {
