@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 class BallNumberWidget extends StatelessWidget {
@@ -23,7 +21,14 @@ class BallNumberWidget extends StatelessWidget {
       height: radius * 2,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isFalled ? Colors.blue : Colors.grey.shade300,
+        color: isFalled ? Colors.blueAccent : Colors.grey.shade300,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(100),
+            blurRadius: 1,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Center(
         child: Text(
@@ -31,6 +36,7 @@ class BallNumberWidget extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: radius * 0.8,
+            color: isFalled ? Colors.white : Colors.black,
           ),
         ),
       ),
