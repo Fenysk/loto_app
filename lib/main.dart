@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:loto_app/loto-app.dart';
 import 'package:loto_app/service/keyboard.service.dart';
+import 'package:loto_app/service/window.service.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
@@ -19,7 +19,9 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return KeyboardListener(
       focusNode: FocusNode(),
-      onKeyEvent: KeyboardService().handleKeyboardEvent,
+      onKeyEvent: KeyboardService(
+        onF11Pressed: WindowService().toogleFullScreen,
+      ).handleKeyboardEvent,
       child: const MaterialApp(
         home: LotoApp(),
       ),
