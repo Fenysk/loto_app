@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:loto_app/repository/grid.repository.dart';
+import 'package:loto_app/repository/ball-grid.repository.dart';
 import 'package:loto_app/widget/ball-number.widget.dart';
 
-class LotoGridWidget extends StatelessWidget {
-  LotoGridWidget({super.key});
+class BallGridWidget extends StatelessWidget {
+  BallGridWidget({super.key});
 
   final gridRepository = GridRepositoryImpl();
 

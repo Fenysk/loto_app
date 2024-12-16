@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:loto_app/repository/grid.repository.dart';
+import 'package:loto_app/repository/ball-grid.repository.dart';
 import 'package:loto_app/widget/ball-number.widget.dart';
-import 'package:loto_app/widget/loto-grid.widget.dart';
+import 'package:loto_app/widget/ball-grid.widget.dart';
 
-class LotoGame extends StatefulWidget {
-  const LotoGame({
+class LotoGamePage extends StatefulWidget {
+  const LotoGamePage({
     super.key,
   });
 
   @override
-  State<LotoGame> createState() => _LotoGameState();
+  State<LotoGamePage> createState() => _LotoGamePageState();
 }
 
-class _LotoGameState extends State<LotoGame> {
+class _LotoGamePageState extends State<LotoGamePage> {
   final gridRepository = GridRepositoryImpl();
 
   @override
@@ -36,6 +36,9 @@ class _LotoGameState extends State<LotoGame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Play Loto'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(40),
         child: Row(
@@ -43,7 +46,7 @@ class _LotoGameState extends State<LotoGame> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Flexible(
-              child: LotoGridWidget(),
+              child: BallGridWidget(),
             ),
             const SizedBox(width: 40),
             Expanded(

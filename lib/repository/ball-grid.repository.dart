@@ -1,11 +1,11 @@
 import 'dart:math';
 
-abstract class GridRepository {
+abstract class BallGridRepository {
   void resetTurn();
   int? drawRandomNumberInPending();
 }
 
-class GridRepositoryImpl extends GridRepository {
+class GridRepositoryImpl extends BallGridRepository {
   List<int> _pendingNumbers = [];
   List<int> _fallenNumbers = [];
 
