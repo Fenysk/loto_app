@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class BallNumberWidget extends StatelessWidget {
@@ -14,7 +16,9 @@ class BallNumberWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
       width: radius * 2,
       height: radius * 2,
       decoration: BoxDecoration(
@@ -24,8 +28,9 @@ class BallNumberWidget extends StatelessWidget {
       child: Center(
         child: Text(
           number.toString(),
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
+            fontSize: radius * 0.8,
           ),
         ),
       ),

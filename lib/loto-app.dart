@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:loto_app/repository/grid.repository.dart';
 import 'package:loto_app/widget/ball-number.widget.dart';
+import 'package:loto_app/widget/loto-grid.widget.dart';
 
 class LotoApp extends StatefulWidget {
   const LotoApp({
@@ -42,8 +43,8 @@ class _LotoAppState extends State<LotoApp> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(
-              child: buildLotoGrid(),
+            Flexible(
+              child: LotoGridWidget(),
             ),
             const SizedBox(width: 40),
             Expanded(
@@ -56,77 +57,55 @@ class _LotoAppState extends State<LotoApp> {
   }
 
   Widget buildSideSection() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          buildLastNumbers(),
-          Spacer(),
-          SizedBox(height: 40),
-          ElevatedButton(
-            onPressed: drawRandomNumberInPending,
-            child: const Text('Draw Number'),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: resetTurn,
-            child: const Text('Reset'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildLastNumbers() {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (gridRepository.fallenNumbers.length > 2)
-          BallNumberWidget(
-            isFalled: true,
-            number: gridRepository.fallenNumbers[gridRepository.fallenNumbers.length - 3],
-            radius: 30,
-          ),
-        const SizedBox(width: 30),
-        if (gridRepository.fallenNumbers.length > 1)
-          BallNumberWidget(
-            isFalled: true,
-            number: gridRepository.fallenNumbers[gridRepository.fallenNumbers.length - 2],
-            radius: 40,
-          ),
-        const SizedBox(width: 30),
-        if (gridRepository.fallenNumbers.isNotEmpty)
-          BallNumberWidget(
-            isFalled: true,
-            number: gridRepository.fallenNumbers.last,
-            radius: 50,
-          ),
+        buildLastNumbers(5),
+        Spacer(),
+        SizedBox(height: 40),
+        ElevatedButton(
+          onPressed: drawRandomNumberInPending,
+          child: const Text('Draw Number'),
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: resetTurn,
+          child: const Text('Reset'),
+        ),
       ],
     );
   }
 
-  Widget buildLotoGrid() {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 10,
-          childAspectRatio: 1 / 1,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
+  Widget buildLastNumbers(int count) {
+    assert(count >= 0 && count <= 5, 'Count must be between 0 and 5');
+    final lastNumbers = gridRepository.fallenNumbers.toList().reversed.take(count).toList();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Last Numbers:',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        itemCount: 90,
-        itemBuilder: (context, index) {
-          int number = index + 1;
-          return BallNumberWidget(
-            isFalled: isFalled(number),
-            number: number,
-          );
-        },
-      ),
+        const SizedBox(height: 20),
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 10,
+          runSpacing: 10,
+          children: lastNumbers
+              .asMap()
+              .entries
+              .map((entry) => BallNumberWidget(
+                    isFalled: true,
+                    number: entry.value,
+                    radius: 40 - (entry.key * 5),
+                  ))
+              .toList(),
+        ),
+      ],
     );
   }
-
-  bool isFalled(int number) => gridRepository.fallenNumbers.contains(number);
 }
